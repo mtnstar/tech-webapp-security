@@ -5,7 +5,6 @@ paginate: true
 backgroundImage: url(./bg.jpg)
 color: white
 ---
-
 # Web App Security 
 
 ---
@@ -50,22 +49,23 @@ color: white
 
 * Use GET for read operations only 
 * Use POST/PUT/PATCH/DELETE for changing operations
-* CORS
 * Use CSRF tokens
+* CORS
 * SameSite Cookies
-
----
-# CORS - Cross-Origin Resource Sharing
 
 ---
 # CSRF and Single Page Applications
 
 * no forms
 * requests through API (XMLHttpRequest, fetch())
-* 
+* api running on subdomain + CORS (Cross-origin resource sharing)
 
 ---
 # SameSite Cookies
+
+<style scoped>
+  table { font-size: 80% }
+</style>
 
 ```
 Set-Cookie: widget_session=abc123; SameSite=Lax; Secure
@@ -80,12 +80,45 @@ Set-Cookie: widget_session=abc123; SameSite=Lax; Secure
 ---
 # Content Security Policy (CSP)
 
+<style scoped>
+  table { font-size: 60% }
+</style>
+
 The application security Swiss Army Knife
+
+| Setting | Values / Description |
+|--|--|
+| default-src | default policy for fetching all resources |
+| script-src | allowed JavaScript sources |
+| style-src | allowed CSS sources |
+| connect-src | AJAX, Web Sockets, fetch(), ... sources |
+| ... | ... |
+| report-to | send failing request info to endpoint defined in Reporting_Endpoints header|
+
+[content-security-policy.com](https://content-security-policy.com/)
+
+---
+# Rails 💗 CSP
+
+```ruby
+# config/initializers/content_security_policy.rb
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self, :https
+  policy.font_src    :self, :https, :data
+  policy.img_src     :self, :https, :data
+  policy.object_src  :none
+  policy.script_src  :self, :https
+  policy.style_src   :self, :https
+ 
+  # Specify URI for violation reports
+  policy.report_uri "/csp-violation-report-endpoint"
+end
+```
 
 ---
 # Discussion
 
-* How to secure our web apps?
+- How to secure our web apps?
 
 ---
 # Sources
@@ -93,3 +126,5 @@ The application security Swiss Army Knife
 - [CSRF and SPA](https://medium.com/tresorit-engineering/modern-csrf-mitigation-in-single-page-applications-695bcb538eec)
 - [Rails Security Guides](https://guides.rubyonrails.org/security.html)
 - [SameSite Cookies](https://web.dev/samesite-cookies-explained/)
+- [SameSite Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+- [Content Security Policy](https://www.youtube.com/watch?v=d0D3d0ZM-rI)
