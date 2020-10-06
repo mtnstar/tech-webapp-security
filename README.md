@@ -118,7 +118,8 @@ end
 ---
 # Discussion
 
-- How to secure our web apps?
+- Cryptopus Security Audit
+- How to increase our web apps' security? (WAF, CSP, SameSite Cookie, ...)
 
 ---
 # Sources
